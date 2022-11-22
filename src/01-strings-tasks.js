@@ -213,7 +213,6 @@ function getRectangleString(width, height) {
       result += `│${' '.repeat(width - 2)}│\n`;
     }
   }
-  console.log(result);
   return result;
 }
 
