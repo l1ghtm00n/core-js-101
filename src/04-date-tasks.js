@@ -19,8 +19,8 @@
  *    'Tue, 26 Jan 2016 13:48:02 GMT' => Date()
  *    'Sun, 17 May 1998 03:00:00 GMT+01' => Date()
  */
-function parseDataFromRfc2822(/* value */) {
-  throw new Error('Not implemented');
+function parseDataFromRfc2822(value) {
+  return new Date(value);
 }
 
 /**
@@ -34,8 +34,8 @@ function parseDataFromRfc2822(/* value */) {
  *    '2016-01-19T16:07:37+00:00'    => Date()
  *    '2016-01-19T08:07:37Z' => Date()
  */
-function parseDataFromIso8601(/* value */) {
-  throw new Error('Not implemented');
+function parseDataFromIso8601(value) {
+  return new Date(value);
 }
 
 
@@ -53,8 +53,18 @@ function parseDataFromIso8601(/* value */) {
  *    Date(2012,1,1)    => true
  *    Date(2015,1,1)    => false
  */
-function isLeapYear(/* date */) {
-  throw new Error('Not implemented');
+function isLeapYear(date) {
+  const y = date.getFullYear();
+  if (y % 4) {
+    return false;
+  }
+  if (y % 100) {
+    return true;
+  }
+  if (y % 400) {
+    return false;
+  }
+  return true;
 }
 
 
@@ -73,8 +83,13 @@ function isLeapYear(/* date */) {
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,10,0,0,250)     => "00:00:00.250"
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,15,20,10,453)   => "05:20:10.453"
  */
-function timeSpanToString(/* startDate, endDate */) {
-  throw new Error('Not implemented');
+function timeSpanToString(startDate, endDate) {
+  const date = endDate - startDate;
+  const h = Math.floor(date / 3600000);
+  const m = Math.floor((date - h * 3600000) / 60000);
+  const s = Math.floor((date - h * 3600000 - m * 60000) / 1000);
+  const ms = Math.floor(date - h * 3600000 - m * 60000 - s * 1000);
+  return `${h > 9 ? h : `0${h}`}:${m > 9 ? m : `0${m}`}:${s > 9 ? s : `0${s}`}.${`000${ms}`.slice(-3)}`;
 }
 
 
@@ -94,8 +109,14 @@ function timeSpanToString(/* startDate, endDate */) {
  *    Date.UTC(2016,3,5,18, 0) => Math.PI
  *    Date.UTC(2016,3,5,21, 0) => Math.PI/2
  */
-function angleBetweenClockHands(/* date */) {
-  throw new Error('Not implemented');
+function angleBetweenClockHands(date) {
+  const m = date.getUTCMinutes();
+  const h = date.getUTCHours();
+  let g = 0.5 * (h * 60 - 11 * m);
+  g = g > 360 ? 720 - g : g;
+  if (g === 0) return 0;
+  const res = g > 180 ? ((360 - g) / 180 || 1) * Math.PI : ((180 - g) / 180 || 1) * Math.PI;
+  return res;
 }
 
 
